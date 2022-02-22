@@ -56,6 +56,8 @@ zpool set bootfs=rpool/ROOT/default rpool
 zpool set cachefile=/etc/zfs/zpool.cache rpool
 zfs mount -a
 
+mkdir -p /boot/efi
+mount /dev/vda1 /boot/efi
 pacstrap /mnt base linux linux-firmware base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
