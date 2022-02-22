@@ -49,3 +49,9 @@ zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/docker
 zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/nfs
 
 zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/tmp
+
+zpool export rpool
+zpool import -d /dev/disk/by-partuuid -R /mnt rpool -N
+zpool set bootfs=rpool/ROOT/default rpool
+cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
+zpool set cachefile=/etc/zfs/zpool.cache rpool
