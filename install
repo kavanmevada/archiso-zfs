@@ -48,8 +48,4 @@ zfs create                                        rpool/var/lib/libvirt
 zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/docker
 zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/nfs
 
-mkdir /mnt/run
-mount -t tmpfs tmpfs /mnt/run
-mkdir /mnt/run/lock
-
 zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/tmp
