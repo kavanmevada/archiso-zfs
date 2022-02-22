@@ -3,6 +3,7 @@ echo "Starting Installer"
 
 $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
 
+BOOT=/dev/disk/by-partuuid/$vda1
 ROOT=/dev/disk/by-partuuid/$vda3
 
 
@@ -10,6 +11,7 @@ POOLS=( $(zpool list | awk '{ print $1 }' | sed -e '1d') )
 
 
 if [ "${#POOLS[@]}" -eq "0" ]; then
+mkdosfs -F 32 -s 1 -n EFI $BOOT
 
 zpool create -f -o ashift=12           \
              -O acltype=posixacl       \
