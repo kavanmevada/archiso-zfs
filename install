@@ -1,7 +1,9 @@
 #!/bin/bash
 echo "Starting Installer"
 
-$(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
+DISKS=$(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
+
+echo $DISKS
 
 zpool create -f -o ashift=12         \
              -O acltype=posixacl       \
