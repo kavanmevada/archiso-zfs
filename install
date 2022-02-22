@@ -8,5 +8,7 @@ ROOT=/dev/disk/by-partuuid/$vda3
 echo "Root is at $ROOT"
 
 
-echo $(zpool list | awk '{ print $1 }' | sed -e '1d')
+POOLS=( $(zpool list | awk '{ print $1 }' | sed -e '1d') )
+
+if [ "${#distro[@]}" -gt "0" ]; then POOL_EXIST=true else POOL_EXIST=false; fi
 
