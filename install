@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "Starting Installer"
 
+$(ls -al /dev/disk/by-partuuid | awk '{ print $11 " " $9}' | sed 's/ /=/g' | sed 's/..\/..\//export /g' | sed -e '1,3d')
+
 zpool create -f -o ashift=12         \
              -O acltype=posixacl       \
              -O relatime=on            \
@@ -11,4 +13,4 @@ zpool create -f -o ashift=12         \
              -O canmount=off           \
              -O devices=off            \
              -R /mnt                   \
-             zroot /dev/disk/by-partuuid/bda49693-c1e7-204d-b952-a80dae46874d
+             zroot /dev/disk/by-partuuid/$sda3
