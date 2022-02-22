@@ -11,4 +11,4 @@ zpool create -f -o ashift=12         \
              -O canmount=off           \
              -O devices=off            \
              -R /mnt                   \
-             zroot /dev/disk/by-id/ata-QEMU_DVD-ROM_QM00005-part3
+             zroot /dev/disk/by-partuuid/bda49693-c1e7-204d-b952-a80dae46874d
