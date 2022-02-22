@@ -1,19 +1,14 @@
 #!/bin/bash
-
-
-#1	+512M	EFI System
-
-# For legacy (BIOS) booting:
-#1	+1000K	BIOS boot partition
-
-#2	+500M	Linux swap
-#3	+2G	Solaris boot
-#4	+ALL	Solaris root
-
-
-
-#!/bin/bash
 echo "Starting Installer"
 
-LIST=$(ls -al /dev/disk/by-partuuid | cut -d' ' -f10-12 | awk '{ print $3 " " $1}' | sed 's/..\/..\///g' | sed -r '/^\s*$/d' | sed 's/ /=/g')
-echo $LIST
+zpool create -f -o ashift=12         \
+             -O acltype=posixacl       \
+             -O relatime=on            \
+             -O xattr=sa               \
+             -O dnodesize=legacy       \
+             -O normalization=formD    \
+             -O mountpoint=none        \
+             -O canmount=off           \
+             -O devices=off            \
+             -R /mnt                   \
+             zroot /dev/disk/by-id/ata-QEMU_DVD-ROM_QM00005-part3
