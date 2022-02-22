@@ -1,10 +1,12 @@
 #!/bin/bash
 echo "Starting Installer"
 
-echo $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9";"}' | sed 's/..\/..\///g' | sed -e '1,3d')
+$(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
+
+ROOT=/dev/disk/by-partuuid/$vda3
 
 
-zpool create -f -o ashift=12         \
+zpool create -f -o ashift=12           \
              -O acltype=posixacl       \
              -O relatime=on            \
              -O xattr=sa               \
@@ -14,4 +16,4 @@ zpool create -f -o ashift=12         \
              -O canmount=off           \
              -O devices=off            \
              -R /mnt                   \
-             zroot /dev/disk/by-partuuid/${vda3}
+             zroot $ROOT
