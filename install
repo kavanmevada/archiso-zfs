@@ -13,4 +13,4 @@ zpool create -f -o ashift=12         \
              -O canmount=off           \
              -O devices=off            \
              -R /mnt                   \
-             zroot /dev/disk/by-partuuid/$sda3
+             zroot /dev/disk/by-partuuid/$vda3
