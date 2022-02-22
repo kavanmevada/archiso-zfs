@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Starting Installer"
 
-$(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
+$(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9";"}' | sed 's/..\/..\///g' | sed -e '1,3d')
 
 
 zpool create -f -o ashift=12         \
