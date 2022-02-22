@@ -41,9 +41,7 @@ zfs create -o canmount=off                 rpool/var/lib
 zfs create                                 rpool/var/log
 zfs create                                 rpool/var/spool
 
-zfs create -o com.sun:auto-snapshot=false  rpool/var/cache
-zfs create -o com.sun:auto-snapshot=false  rpool/var/tmp
-chmod 1777 /mnt/var/tmp
+zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/cache
 
 zfs create                                 rpool/opt
 zfs create                                 rpool/srv
@@ -55,13 +53,13 @@ zfs create                                 rpool/var/mail
 zfs create                                 rpool/var/snap
 zfs create                                 rpool/var/www
 zfs create                                 rpool/var/lib/AccountsService
-zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/docker
-zfs create -o com.sun:auto-snapshot=false  rpool/var/lib/nfs
+zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/docker
+zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/var/lib/nfs
 
 
 mkdir /mnt/run
 mount -t tmpfs tmpfs /mnt/run
 mkdir /mnt/run/lock
 
-zfs create -o com.sun:auto-snapshot=false  rpool/tmp
+zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/tmp
 chmod 1777 /mnt/tmp
