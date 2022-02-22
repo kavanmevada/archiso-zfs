@@ -20,8 +20,15 @@ zpool create -f -o ashift=12           \
              -O mountpoint=none        \
              -O canmount=off           \
              -O devices=off            \
+             -O compression=lz4        \
              -R /mnt                   \
              zroot $ROOT
 echo "zroot created!"
 fi
+
+
+zfs create -o mountpoint=none zroot/data
+zfs create -o mountpoint=none zroot/ROOT
+zfs create -o mountpoint=/ -o canmount=noauto zroot/ROOT/default
+zfs create -o mountpoint=/home zroot/data/home
 
