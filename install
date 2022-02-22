@@ -7,14 +7,6 @@ ROOT=/dev/disk/by-partuuid/$vda3
 
 echo "Root is at $ROOT"
 
-zpool create -f -o ashift=12           \
-             -O acltype=posixacl       \
-             -O relatime=on            \
-             -O xattr=sa               \
-             -O dnodesize=legacy       \
-             -O normalization=formD    \
-             -O mountpoint=none        \
-             -O canmount=off           \
-             -O devices=off            \
-             -R /mnt                   \
-             zroot $ROOT
+
+array=(zpool list | awk '{print $1}' | sed -e '1d')
+[[ " ${array[*]} " =~ " ${value} " ]]; then echo true; fi
