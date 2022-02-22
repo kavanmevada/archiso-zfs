@@ -53,10 +53,11 @@ zfs create -o com.archlinux.zsys:auto-snapshot=false  rpool/tmp
 zpool export rpool
 zpool import -d /dev/disk/by-partuuid -R /mnt rpool -N
 zpool set bootfs=rpool/ROOT/default rpool
+zpool set cachefile=/etc/zfs/zpool.cache rpool
 zfs mount -a
 
 pacstrap /mnt base linux linux-firmware base-devel
+genfstab -U -p /mnt >> /mnt/etc/fstab
 
-
-#cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
-#zpool set cachefile=/etc/zfs/zpool.cache rpool
+mkdir /mnt/etc/zfs
+cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
