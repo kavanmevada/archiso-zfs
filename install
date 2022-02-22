@@ -8,5 +8,5 @@ ROOT=/dev/disk/by-partuuid/$vda3
 echo "Root is at $ROOT"
 
 
-array=( $(zpool list | awk '{ print $1 }' | sed -e '1d') )
-[[ " ${array[*]} " =~ " ${value} " ]]; then echo true; fi
+$(zpool list | awk '{ print $1 }' | sed -e '1d')
+
