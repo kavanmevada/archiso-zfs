@@ -1,5 +1,19 @@
 #!/bin/bash
+
+
+#1	+512M	EFI System
+
+# For legacy (BIOS) booting:
+#1	+1000K	BIOS boot partition
+
+#2	+500M	Linux swap
+#3	+2G	Solaris boot
+#4	+ALL	Solaris root
+
+
+
+#!/bin/bash
 echo "Starting Installer"
 
-LIST=$(ls -al /dev/disk/by-partuuid | cut -d' ' -f10- | sed -i 's/>/=/g')
+LIST=$(ls -al /dev/disk/by-partuuid | cut -d' ' -f10-12 | awk '{ print $3 " " $1}' | sed 's/..\/..\///g' | sed -r '/^\s*$/d' | sed 's/ /=/g')
 echo $LIST
