@@ -11,5 +11,5 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Build docker images
-        run: >
+        run: |
            echo Kavan!
