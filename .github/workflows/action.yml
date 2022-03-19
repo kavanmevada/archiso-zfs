@@ -1,3 +1,7 @@
+name: ZFS build a
+on:
+  push
+
 jobs:
   build:
       runs-on: ubuntu-latest
