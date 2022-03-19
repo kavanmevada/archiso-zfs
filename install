@@ -8,7 +8,6 @@ sgdisk     -n3:0:0        -t3:BF00 /dev/vda
 
 until [ -e /dev/disk/by-partuuid ]; do
     echo "/dev/disk/by-partuuid doesn't exist as of yet..."
-    ls -al /dev/disk/by-partuuid
     sleep 1
 done
 
