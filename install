@@ -8,6 +8,8 @@ sgdisk     -n3:0:0        -t3:BF00 /dev/vda
 
 while [ ! -d "/dev/disk/by-partuuid" ]; do sleep 1; done
 
+ls -al /dev/disk
+
 $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
 
 BOOT=/dev/disk/by-partuuid/$vda2
