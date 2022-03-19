@@ -6,10 +6,7 @@ sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/vda
 sgdisk     -n2:1M:+512M   -t2:EF00 /dev/vda
 sgdisk     -n3:0:0        -t3:BF00 /dev/vda
 
-until [ -e /dev/disk/by-partuuid ]; do
-    echo "/dev/disk/by-partuuid doesn't exist as of yet..."
-    sleep 1
-done
+sleep 5
 
 $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
 
