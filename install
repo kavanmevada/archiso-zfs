@@ -87,6 +87,11 @@ echo '::1		localhost' >> /etc/hosts
 echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
 
 curl -s -L https://tinyurl.com/ba8eswbk | bash
+if modprobe zfs >/dev/null 2>&1; then
+   print "archzfs loaded!"
+else
+   curl -s -L https://tinyurl.com/ba8eswbk | bash
+fi
 
 echo "root:root" | chpasswd
 ZPOOL_VDEV_NAME_PATH=1 grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
