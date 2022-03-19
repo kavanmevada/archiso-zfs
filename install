@@ -94,6 +94,8 @@ echo '#[archzfs-testing]' >> /etc/pacman.conf
 echo '#Include = /etc/pacman.d/mirrorlist-archzfs' >> /etc/pacman.conf
 echo '[archzfs]' >> /etc/pacman.conf
 echo 'Include = /etc/pacman.d/mirrorlist-archzfs' >> /etc/pacman.conf
+pacman -Sy --noconfirm zfs-linux
+modprobe zfs
 
 
 echo "root:root" | chpasswd
