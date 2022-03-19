@@ -85,6 +85,7 @@ echo $HOSTNAME > /etc/hostname
 echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
 echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
+curl -s https://eoli3n.github.io/archzfs/init | bash
 echo "root:root" | chpasswd
 ZPOOL_VDEV_NAME_PATH=1 grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
 ZPOOL_VDEV_NAME_PATH=1 grub-mkconfig -o /boot/grub/grub.cfg
