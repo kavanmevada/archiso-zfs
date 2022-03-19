@@ -6,7 +6,7 @@ jobs:
   build:
       runs-on: ubuntu-latest
       container:
-        image: docker://hub.docker.com/archlinux:latest
+        image: docker://docker.io/archlinux:latest
       steps:
       - name: Checkout code
         uses: actions/checkout@v1
