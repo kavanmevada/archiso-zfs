@@ -9,7 +9,7 @@ exit
 
 $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..\/..\///g' | sed -e '1,3d')
 
-BOOT=/dev/disk/by-partuuid/$vda1
+BOOT=/dev/disk/by-partuuid/$vda2
 ROOT=/dev/disk/by-partuuid/$vda3
 
 POOLS=( $(zpool list | awk '{ print $1 }' | sed -e '1d') )
