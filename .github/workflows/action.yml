@@ -4,4 +4,6 @@ jobs:
       container:
         image: docker://hub.docker.com/archlinux:latest
       steps:
-        echo Hello!
+        - name: Install
+        run: >
+           echo Kavan!
