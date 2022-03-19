@@ -12,6 +12,7 @@ $(ls -al /dev/disk/by-partuuid | awk '{ print "export " $11 "=" $9}' | sed 's/..
 
 BOOT=/dev/disk/by-partuuid/$vda2
 ROOT=/dev/disk/by-partuuid/$vda3
+HOSTNAME=workstation
 
 POOLS=( $(zpool list | awk '{ print $1 }' | sed -e '1d') )
 
@@ -66,8 +67,23 @@ zfs mount -a
 
 mkdir -p /boot/efi
 mount $BOOT /boot/efi
-pacstrap /mnt base linux linux-firmware base-devel
+pacstrap /mnt base linux linux-firmware base-devel grub efibootmgr
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
 mkdir /mnt/etc/zfs
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
+
+
+cat << EOF | arch-chroot /mnt /bin/sh
+timedatectl set-timezone Europe/Paris
+sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
+locale-gen
+echo LANG=en_GB.UTF-8 > /etc/locale.conf
+echo $HOSTNAME > /etc/hostname
+echo '127.0.0.1	localhost' > /etc/hosts
+echo '::1		localhost' > /etc/hosts
+echo '127.0.1.1	'$HOSTNAME > /etc/hosts
+echo "root:root" | chpasswd
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
+EOF
