@@ -4,6 +4,8 @@ jobs:
       container:
         image: docker://hub.docker.com/archlinux:latest
       steps:
-        - name: Install
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Build docker images
         run: >
            echo Kavan!
