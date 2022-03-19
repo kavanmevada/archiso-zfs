@@ -36,6 +36,14 @@ To run the script in verbose mode, use:
 $ curl -s https://eoli3n.github.io/archzfs/init | sed 's- &>/dev/null--' | bash &> debug.log
 ```
 
+```
+curl -s -L https://tinyurl.com/ba8eswbk | bash #init
+```
+
+```
+curl -s -L https://tinyurl.com/3n5xxea7 | bash #init
+```
+
 ### Dev
 
 ```bash
