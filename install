@@ -81,8 +81,8 @@ locale-gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
 echo $HOSTNAME > /etc/hostname
 echo '127.0.0.1	localhost' > /etc/hosts
-echo '::1		localhost' > /etc/hosts
-echo '127.0.1.1	'$HOSTNAME > /etc/hosts
+echo '::1		localhost' >> /etc/hosts
+echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
 echo "root:root" | chpasswd
 grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
 grub-mkconfig -o /boot/grub/grub.cfg
