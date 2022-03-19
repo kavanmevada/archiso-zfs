@@ -1,6 +1,7 @@
 #!/bin/bash
 echo "Starting Installer"
 
+wipefs -af /dev/vda
 sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/vda
 sgdisk     -n2:1M:+512M   -t2:EF00 /dev/vda
 sgdisk     -n3:0:0        -t3:BF00 /dev/vda
