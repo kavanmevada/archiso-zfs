@@ -73,7 +73,7 @@ EOF
 
 
 echo '[daemon]' > /etc/gdm/custom.conf
-echo 'InitialSetupEnable=True' > /etc/gdm/custom.conf
+echo 'InitialSetupEnable=True' >> /etc/gdm/custom.conf
 
 cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
