@@ -12,6 +12,8 @@ sleep 5
 
 mkfs.vfat /dev/vda2
 
+sleep 2
+
 # Check zfs module loaded or not.
 test -n "$(grep -e "^zfs " /proc/modules)" && echo "zfs Loaded" || (echo "zfs Not loaded" && exit)
 
@@ -26,7 +28,8 @@ zpool create -f -o ashift=12 \
   -O devices=off \
   -R /mnt \
   zroot /dev/vda3
-  
+
+sleep 2
   
 zfs create -o mountpoint=none zroot/data
 zfs create -o mountpoint=none zroot/ROOT
@@ -54,14 +57,14 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
-pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr gdm gnome-shell gnome-control-center nautilus gnome-terminal dhclient
+pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr gnome-desktop zsh grml-zsh-config
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
 tee -a /mnt/etc/pacman.conf <<- 'EOF'
 
-#[archzfs-testing]
-#Include = /etc/pacman.d/mirrorlist-archzfs
+[archzfs-testing]
+Include = /etc/pacman.d/mirrorlist-archzfs
 
 [archzfs]
 Include = /etc/pacman.d/mirrorlist-archzfs
@@ -71,7 +74,7 @@ cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
 sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
-echo LANG=en_GB.UTF-8 > /etc/locale.conf
+echo LANG=en_US.UTF-8 > /etc/locale.conf
 echo workstation > /etc/hostname
 echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
