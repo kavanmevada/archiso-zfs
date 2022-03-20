@@ -57,6 +57,15 @@ pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
+curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
+tee -a /mnt/etc/pacman.conf <<- 'EOF'
+
+#[archzfs-testing]
+#Include = /etc/pacman.d/mirrorlist-archzfs
+
+[archzfs]
+Include = /etc/pacman.d/mirrorlist-archzfs
+EOF
 
 cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
@@ -77,17 +86,6 @@ sed -i'' 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="root=ZFS=zroot\/ROOT\/defa
 
 curl -L https://archzfs.com/archzfs.gpg |  pacman-key -a -
 pacman-key --lsign-key $(curl -L https://git.io/JsfVS)
-curl -L https://git.io/Jsfw2 > /etc/pacman.d/mirrorlist-archzfs
-
-tee -a /etc/pacman.conf <<- 'EOF'
-
-#[archzfs-testing]
-#Include = /etc/pacman.d/mirrorlist-archzfs
-
-[archzfs]
-Include = /etc/pacman.d/mirrorlist-archzfs
-EOF
-
 
 
 grub-install --target=x86_64-efi --bootloader-id=ARCHLINUX --efi-directory=/boot/efi
