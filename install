@@ -57,7 +57,8 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
-pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr gnome zsh grml-zsh-config
+pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr gnome-shell gnome-backgrounds nautilus gnome-terminal gnome-text-editor gnome-tweak-tool gnome-control-center xdg-user-dirs xdg-desktop-portal-gnome gdm
+ zsh grml-zsh-config networkmanager
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
@@ -69,6 +70,10 @@ Include = /etc/pacman.d/mirrorlist-archzfs
 [archzfs]
 Include = /etc/pacman.d/mirrorlist-archzfs
 EOF
+
+
+echo '[daemon]' > /etc/gdm/custom.conf
+echo 'InitialSetupEnable=True' > /etc/gdm/custom.conf
 
 cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
@@ -102,6 +107,7 @@ systemctl enable zfs-zed
 systemctl enable zfs.target
 
 systemctl enable gdm
+systemctl enable NetworkManager
 
 
 echo "root:root" | chpasswd
