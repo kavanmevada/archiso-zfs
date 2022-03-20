@@ -51,11 +51,11 @@ zpool set cachefile=/etc/zfs/zpool.cache zroot
 mkdir -p /mnt/{etc/zfs,boot/efi}
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 
-mount /dev/vda1 /mnt/boot/efi
+mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr
-genfstab -U -p /mnt >> /mnt/etc/fstab
+genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 exit
 
@@ -64,14 +64,34 @@ timedatectl set-timezone Europe/Paris
 sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
 echo LANG=en_GB.UTF-8 > /etc/locale.conf
-echo $HOSTNAME > /etc/hostname
+echo workstation > /etc/hostname
 echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
-echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
+echo '127.0.1.1	workstation' >> /etc/hosts
 
-curl -s -L https://tinyurl.com/ba8eswbk | bash
+
+sed -i'' 's/filesystems\ keyboard\ fsck/keyboard\ zfs\ filesystems/g' /etc/mkinitcpio.conf
+pacman -Sy --needed --noconfirm zfs-dkms glibc
+# mkinitcpio -p linux
+
+sed -i'' 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="root=ZFS=zroot\/ROOT\/default"/g' /etc/default/grub
+
+
+
+grub-install --target=x86_64-efi --bootloader-id=ARCHLINUX --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
+
+systemctl enable zfs-import-cache
+systemctl enable zfs-import-scan
+systemctl enable zfs-mount
+systemctl enable zfs-share
+systemctl enable zfs-zed
+systemctl enable zfs.target
+
 
 echo "root:root" | chpasswd
-grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
-grub-mkconfig -o /boot/grub/grub.cfg
 EOF
+
+umount /mnt/boot/efi
+zfs umount -a
+zpool export zroot
