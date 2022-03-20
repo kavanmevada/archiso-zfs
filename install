@@ -1,16 +1,16 @@
 #!/bin/bash
 echo "Starting Installer"
 
-wipefs -af /dev/vda
-sgdisk --zap-all /dev/vda
+wipefs -af /dev/sda
+sgdisk --zap-all /dev/sda
 
-sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/vda
-sgdisk     -n2:1M:+512M   -t2:EF00 /dev/vda
-sgdisk     -n3:0:0        -t3:BF00 /dev/vda
+sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/sda
+sgdisk     -n2:1M:+512M   -t2:EF00 /dev/sda
+sgdisk     -n3:0:0        -t3:BF00 /dev/sda
 
 sleep 5
 
-mkfs.vfat /dev/vda2
+mkfs.vfat /dev/sda2
 
 # Check zfs module loaded or not.
 test -n "$(grep -e "^zfs " /proc/modules)" && echo "zfs Loaded" || (echo "zfs Not loaded" && exit)
@@ -25,7 +25,7 @@ zpool create -f -o ashift=12 \
   -O canmount=off \
   -O devices=off \
   -R /mnt \
-  zroot /dev/vda3
+  zroot /dev/sda3
   
   
 zfs create -o mountpoint=none zroot/data
@@ -41,7 +41,7 @@ zfs create zroot/var/lib/libvirt
 zfs create zroot/var/lib/docker
 
 zpool export zroot
-zpool import -d /dev/vda3 -R /mnt zroot -N
+zpool import -d /dev/sda3 -R /mnt zroot -N
 
 zfs mount zroot/ROOT/default
 zfs mount -a
@@ -51,7 +51,7 @@ zpool set cachefile=/etc/zfs/zpool.cache zroot
 mkdir -p /mnt/{etc/zfs,boot/efi}
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 
-mount /dev/vda2 /mnt/boot/efi
+mount /dev/sda2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr
