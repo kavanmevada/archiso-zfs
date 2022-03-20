@@ -57,7 +57,6 @@ pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
-exit
 
 cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
