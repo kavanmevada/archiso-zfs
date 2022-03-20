@@ -58,18 +58,23 @@ mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr \
-  gnome-shell gnome-backgrounds nautilus gnome-terminal gedit eog evince gnome-system-monitor \
+  gnome-shell gnome-initial-setup totem gnome-backgrounds nautilus gnome-terminal gedit eog evince gnome-system-monitor \
   gnome-disk-utility gnome-screenshot gnome-logs gnome-font-viewer yelp gnome-photos \
   file-roller epiphany gnome-calculator gnome-calendar gnome-characters gnome-keyring \
   gnome-software gnome-user-share gvfs gnome-shell-extensions gnome-maps gnome-contacts \
-  gnome-color-manager sushi cheese gnome-remote-desktop gnome-tweak-tool gnome-control-center \
+  gnome-color-manager sushi cheese gnome-remote-desktop gnome-control-center \
   xdg-user-dirs xdg-user-dirs-gtk xdg-desktop-portal-gnome gdm zsh grml-zsh-config networkmanager \
-  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav
+  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts
 
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
 tee -a /mnt/etc/pacman.conf <<- 'EOF'
+
+[fcgu]
+Server = https://gnome.holmie.xyz/$repo
+Server = https://$repo.fabis.cafe/$repo
+Server = https://vmi394248.contaboserver.net/$repo
 
 [archzfs-testing]
 Include = /etc/pacman.d/mirrorlist-archzfs
@@ -92,6 +97,7 @@ echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
 echo '127.0.1.1	workstation' >> /etc/hosts
 
+pacman -Syu
 
 sed -i'' 's/filesystems\ keyboard\ fsck/keyboard\ zfs\ filesystems/g' /etc/mkinitcpio.conf
 pacman -Sy --needed --noconfirm zfs-dkms glibc
