@@ -54,7 +54,7 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
-pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr gdm gnome-shell gnome-control-center nautilus gnome-terminal 
+pacstrap /mnt base base-devel linux linux-firmware linux-headers nano vim grub efibootmgr gdm gnome-shell gnome-control-center nautilus gnome-terminal dhclient
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
