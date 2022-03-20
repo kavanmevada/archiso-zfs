@@ -10,7 +10,7 @@ sgdisk     -n3:0:0        -t3:BF00 /dev/vda
 
 sleep 5
 
-mkfs.vfat /dev/vda1
+mkfs.vfat /dev/vda2
 
 # Check zfs module loaded or not.
 test -n "$(grep -e "^zfs " /proc/modules)" && echo "zfs Loaded" || (echo "zfs Not loaded" && exit)
@@ -41,7 +41,7 @@ zfs create zroot/var/lib/libvirt
 zfs create zroot/var/lib/docker
 
 zpool export zroot
-zpool import -d /dev/vda2 -R /mnt zroot -N
+zpool import -d /dev/vda3 -R /mnt zroot -N
 
 zfs mount zroot/ROOT/default
 zfs mount -a
