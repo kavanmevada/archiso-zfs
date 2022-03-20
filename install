@@ -57,8 +57,15 @@ cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 mount /dev/vda2 /mnt/boot/efi
 
 pacman -Syy
-pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr gnome-shell gnome-backgrounds nautilus gnome-terminal gnome-text-editor gnome-tweak-tool gnome-control-center xdg-user-dirs xdg-desktop-portal-gnome gdm
- zsh grml-zsh-config networkmanager
+pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr \
+  gnome-shell gnome-backgrounds nautilus gnome-terminal gedit eog evince gnome-system-monitor \
+  gnome-disk-utility gnome-screenshot gnome-logs gnome-font-viewer yelp gnome-photos \
+  file-roller epiphany gnome-calculator gnome-calendar gnome-characters gnome-keyring \
+  gnome-software gnome-user-share gvfs gnome-shell-extensions gnome-maps gnome-contacts \
+  gnome-color-manager sushi cheese gnome-remote-desktop gnome-tweak-tool gnome-control-center \
+  xdg-user-dirs xdg-user-dirs-gtk xdg-desktop-portal-gnome gdm zsh grml-zsh-config networkmanager \
+  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav
+
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
