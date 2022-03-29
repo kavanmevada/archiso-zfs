@@ -1,16 +1,21 @@
 #!/bin/bash
 echo "Starting Installer"
 
-wipefs -af /dev/vda
-sgdisk --zap-all /dev/vda
+DISK=/dev/sda
 
-sgdisk -a1 -n1:24K:+1000K -t1:EF02 /dev/vda
-sgdisk     -n2:1M:+512M   -t2:EF00 /dev/vda
-sgdisk     -n3:0:0        -t3:BF00 /dev/vda
+wipefs -af $DISK
+sgdisk --zap-all $DISK
+
+sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
+sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
+sgdisk     -n3:0:+1G      -t3:8200 $DISK
+sgdisk     -n3:0:0        -t3:BF00 $DISK
 
 sleep 5
 
-mkfs.vfat /dev/vda2
+mkfs.vfat ${DISK}2
+mkswap ${DISK}3
+swapon ${DISK}3
 
 sleep 2
 
@@ -27,7 +32,7 @@ zpool create -f -o ashift=12 \
   -O canmount=off \
   -O devices=off \
   -R /mnt \
-  zroot /dev/vda3
+  zroot ${DISK}4
 
 sleep 2
   
@@ -44,7 +49,7 @@ zfs create zroot/var/lib/libvirt
 zfs create zroot/var/lib/docker
 
 zpool export zroot
-zpool import -d /dev/vda3 -R /mnt zroot -N
+zpool import -d ${DISK}4 -R /mnt zroot -N
 
 zfs mount zroot/ROOT/default
 zfs mount -a
@@ -54,7 +59,7 @@ zpool set cachefile=/etc/zfs/zpool.cache zroot
 mkdir -p /mnt/{etc/zfs,boot/efi}
 cp /etc/zfs/zpool.cache /mnt/etc/zfs/zpool.cache
 
-mount /dev/vda2 /mnt/boot/efi
+mount ${DISK}2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr \
@@ -70,11 +75,6 @@ genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
 curl -L https://git.io/Jsfw2 > /mnt/etc/pacman.d/mirrorlist-archzfs
 tee -a /mnt/etc/pacman.conf <<- 'EOF'
-
-[fcgu]
-Server = https://gnome.holmie.xyz/$repo
-Server = https://$repo.fabis.cafe/$repo
-Server = https://vmi394248.contaboserver.net/$repo
 
 [archzfs-testing]
 Include = /etc/pacman.d/mirrorlist-archzfs
