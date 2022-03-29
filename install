@@ -63,7 +63,7 @@ mount ${DISK}2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr \
-  gnome-shell gnome-initial-setup gnome-backgrounds nautilus gnome-terminal gnome-system-monitor \
+  gnome-shell gnome-initial-setup gnome-backgrounds gnome-terminal gnome-system-monitor \
   gnome-disk-utility yelp gnome-keyring gnome-software gnome-user-share gvfs gnome-control-center \
   xdg-user-dirs xdg-user-dirs-gtk xdg-desktop-portal-gnome gdm zsh grml-zsh-config networkmanager \
   gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts
@@ -127,9 +127,9 @@ flatpak install gnome-nightly org.gnome.Calendar.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.CharactersDevel --noninteractive
 flatpak install gnome-nightly org.gnome.Contacts.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.clocksDevel --noninteractive
-flatpak install gnome-nightly org.gnome.Epiphany.Canary --noninteractive
+flatpak install gnome-nightly org.gnome.Epiphany.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.Evince --noninteractive
-flatpak install gnome-nightly org.gnome.Extensions.Devel --noninteractive
+# flatpak install gnome-nightly org.gnome.Extensions.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.Logs --noninteractive --noninteractive
 flatpak install gnome-nightly org.gnome.Maps.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.NautilusDevel --noninteractive
@@ -138,11 +138,14 @@ flatpak install gnome-nightly org.gnome.eog.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.font-viewerDevel --noninteractive
 flatpak install gnome-nightly org.gnome.Connections.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.Screenshot --noninteractive
-flatpak install org.gnome.Totem --noninteractive
+flatpak install gnome-nightly org.gnome.Weather.Devel --noninteractive
+flatpak install gnome-nightly org.gnome.Totem.Devel --noninteractive
 
 echo "root:root" | chpasswd
 chsh -s /bin/zsh
 EOF
+
+zfs snapshot -r zroot@factory
 
 umount /mnt/boot/efi
 zfs umount -a
