@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "Starting Installer"
 
-DISK=/dev/sda
+DISK=/dev/vda
 
 wipefs -af $DISK
 sgdisk --zap-all $DISK
