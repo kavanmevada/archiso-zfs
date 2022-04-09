@@ -1,14 +1,14 @@
 #!/bin/bash
 echo "Starting Arch ZFS Installer!"
 
-DISK=/dev/vda
+DISK=/dev/sda
 
 wipefs -af $DISK
 sgdisk --zap-all $DISK
 
 sgdisk -a1 -n1:24K:+1000K -t1:EF02 $DISK
 sgdisk     -n2:1M:+512M   -t2:EF00 $DISK
-sgdisk     -n3:0:+1G      -t3:8200 $DISK
+sgdisk     -n3:0:+18G     -t3:8200 $DISK
 sgdisk     -n4:0:0        -t4:BF00 $DISK
 
 sleep 5
@@ -138,13 +138,6 @@ flatpak install gnome-nightly org.gnome.Weather.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.Totem.Devel --noninteractive
 
 
-echo "NoDisplay=true" > "/usr/share/applications/avahi-discover.desktop"
-echo "NoDisplay=true" > "/usr/share/applications/qv4l2.desktop"
-echo "NoDisplay=true" > "/usr/share/applications/qdbusviewer-qt4.desktop"
-echo "NoDisplay=true" > "/usr/share/applications/qtconfig-qt4.desktop"
-
-
-qv4l2.desktop
 
 echo "root:root" | chpasswd
 chsh -s /bin/zsh
