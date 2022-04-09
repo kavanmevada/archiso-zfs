@@ -66,7 +66,7 @@ pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr
   gnome-shell gnome-backgrounds gnome-terminal gnome-system-monitor \
   gnome-disk-utility yelp gnome-keyring gnome-software gnome-user-share gvfs gnome-control-center \
   xdg-user-dirs xdg-user-dirs-gtk xdg-desktop-portal-gnome gdm zsh grml-zsh-config networkmanager \
-  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts sudo
+  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts sudo flatpak
 
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
@@ -142,7 +142,7 @@ chsh -s /bin/zsh
 
 useradd --create-home kavan
 usermod --append --groups wheel kavan
-sed -n 's/#\(.*%wheel.*ALL=(ALL).*ALL.*\)/\1/p' /etc/sudoers
+echo -e "%wheel ALL=(ALL) ALL\nDefaults kavan" > /etc/sudoers.d/99_wheel 
 echo "kavan:kavan" | chpasswd
 chsh kavan -s /bin/zsh
 EOF
