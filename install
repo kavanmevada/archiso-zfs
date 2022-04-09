@@ -63,10 +63,10 @@ mount ${DISK}2 /mnt/boot/efi
 
 pacman -Syy
 pacstrap /mnt base base-devel linux linux-firmware linux-headers grub efibootmgr \
-  gnome-shell gnome-initial-setup gnome-backgrounds gnome-terminal gnome-system-monitor \
+  gnome-shell gnome-backgrounds gnome-terminal gnome-system-monitor \
   gnome-disk-utility yelp gnome-keyring gnome-software gnome-user-share gvfs gnome-control-center \
   xdg-user-dirs xdg-user-dirs-gtk xdg-desktop-portal-gnome gdm zsh grml-zsh-config networkmanager \
-  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts
+  gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav noto-fonts sudo
 
 genfstab -U -p /mnt | sed -e '/^zroot/d;/^#\ zroot/d' > /mnt/etc/fstab
 
@@ -79,10 +79,6 @@ Include = /etc/pacman.d/mirrorlist-archzfs
 [archzfs]
 Include = /etc/pacman.d/mirrorlist-archzfs
 EOF
-
-
-echo '[daemon]' > /etc/gdm/custom.conf
-echo 'InitialSetupEnable=True' >> /etc/gdm/custom.conf
 
 cat << EOF | arch-chroot /mnt /bin/sh
 timedatectl set-timezone Europe/Paris
@@ -143,6 +139,12 @@ flatpak install gnome-nightly org.gnome.Totem.Devel --noninteractive
 
 echo "root:root" | chpasswd
 chsh -s /bin/zsh
+
+useradd --create-home kavan
+usermod --append --groups wheel kavan
+sed -n 's/#\(.*%wheel.*ALL=(ALL).*ALL.*\)/\1/p' /etc/sudoers
+echo "kavan:kavan" | chpasswd
+chsh kavan -s /bin/zsh
 EOF
 
 zfs snapshot -r zroot@factory
