@@ -137,6 +137,15 @@ flatpak install gnome-nightly org.gnome.Screenshot --noninteractive
 flatpak install gnome-nightly org.gnome.Weather.Devel --noninteractive
 flatpak install gnome-nightly org.gnome.Totem.Devel --noninteractive
 
+
+echo "NoDisplay=true" > "/usr/share/applications/avahi-discover.desktop"
+echo "NoDisplay=true" > "/usr/share/applications/qv4l2.desktop"
+echo "NoDisplay=true" > "/usr/share/applications/qdbusviewer-qt4.desktop"
+echo "NoDisplay=true" > "/usr/share/applications/qtconfig-qt4.desktop"
+
+
+qv4l2.desktop
+
 echo "root:root" | chpasswd
 chsh -s /bin/zsh
 
