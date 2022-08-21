@@ -28,8 +28,8 @@ jobs:
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm/configs/bcm2711_defconfig
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
             tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
-            ln -s arch/arm64/boot/dts/overlays ../../../arm/boot/dts/overlays
             svn checkout https://github.com/raspberrypi/linux/tree/rpi-5.15.y/arch/arm/boot/dts/overlays ./arm/boot/dts
+            ln -s arch/arm64/boot/dts/overlays ../../../arm/boot/dts/overlays
 
             export KERNEL=kernel8
             make bcm2711_defconfig
