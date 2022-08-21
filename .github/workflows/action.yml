@@ -28,7 +28,7 @@ jobs:
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm/configs/bcm2711_defconfig
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
             tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
-            git clone --depth=1 https://github.com/raspberrypi/linux /tmp
+            mkdir /tmp/linux && git clone --depth=1 https://github.com/raspberrypi/linux /tmp/linux
             CP -r /tmp/linux/arch/arm/boot/dts/overlays ./arm/boot/dts
             ln -s arch/arm64/boot/dts/overlays ../../../arm/boot/dts/overlays
 
