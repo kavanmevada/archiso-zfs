@@ -22,6 +22,7 @@ jobs:
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
+            sudo apt-get install git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves -y
             git clone --depth=1 https://github.com/torvalds/linux && cd linux
             make -j4 Image.gz modules dtbs
             make -j4 bindeb-pkg
