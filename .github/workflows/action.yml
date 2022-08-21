@@ -23,12 +23,13 @@ jobs:
             uname -a
             echo ::set-output name=uname::$(uname -a)
             DEBIAN_FRONTEND=noninteractive
-            apt update -qq -o=Dpkg::Use-Pty=0 && apt-get install -qq -o=Dpkg::Use-Pty=0 curl git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves -y
+            apt update -qq -o=Dpkg::Use-Pty=0 && apt-get install -qq -o=Dpkg::Use-Pty=0 curl subversion git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves -y
             git clone --quiet --depth=1 https://github.com/torvalds/linux && cd linux
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm/configs/bcm2711_defconfig
             curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
             tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
             ln -s arch/arm64/boot/dts/overlays ../../../arm/boot/dts/overlays
+            svn checkout https://github.com/raspberrypi/linux/tree/rpi-5.15.y/arch/arm/boot/dts/overlays ./arm/boot/dts
 
             export KERNEL=kernel8
             make bcm2711_defconfig
