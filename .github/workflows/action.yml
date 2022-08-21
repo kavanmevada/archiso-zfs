@@ -30,7 +30,7 @@ jobs:
             tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
             mkdir /tmp/linux && git clone --depth=1 https://github.com/raspberrypi/linux /tmp/linux
             cp -r /tmp/linux/arch/arm/boot/dts/overlays ./arch/arm/boot/dts
-            ln -s arch/arm64/boot/dts/overlays ../../../arm/boot/dts/overlays
+            ln -s ../../../arm/boot/dts/overlays arch/arm64/boot/dts/overlays
 
             export KERNEL=kernel8
             make bcm2711_defconfig
