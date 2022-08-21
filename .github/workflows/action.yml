@@ -22,8 +22,17 @@ jobs:
           run: |
             uname -a
             echo ::set-output name=uname::$(uname -a)
+            git clone --depth=1 https://github.com/torvalds/linux && cd linux
+            make -j4 Image.gz modules dtbs
+            make -j4 bindeb-pkg
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
         run: |
           echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with: 
+          name: assets-for-download
+          path: ../linux*.deb
