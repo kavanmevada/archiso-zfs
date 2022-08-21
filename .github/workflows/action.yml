@@ -34,8 +34,8 @@ jobs:
 
             export KERNEL=kernel8
             make bcm2711_defconfig
-            make -j`nproc` Image.gz modules dtbs
-            make -j`nproc` bindeb-pkg
+            make -j5 Image.gz modules dtbs
+            make -j5 bindeb-pkg
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
