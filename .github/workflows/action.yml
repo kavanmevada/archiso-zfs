@@ -20,15 +20,20 @@ jobs:
           cp -r /tmp/linux/arch/arm/boot/dts/overlays ./arch/arm/boot/dts
           ln -s ../../../arm/boot/dts/overlays arch/arm64/boot/dts/overlays
 
-
+          scripts/config --disable DEBUG_INFO
           make ARCH=arm64 bcm2711_defconfig
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 Image.gz modules dtbs
+          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 zImage modules dtbs
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 bindeb-pkg
-          mkdir -p $HOME/artifacts
-          cp -r ../linux-* $HOME/artifacts
-          sudo cp -r /boot $HOME/artifacts
-          sudo cp -r /usr/lib/linux-image-6.0.0-rc2-v7l+/broadcom $HOME/artifacts
-          sudo cp -r /usr/lib/linux-image-6.0.0-rc2-v7l+/overlays $HOME/artifacts
+          
+          mkdir -p $HOME/artifacts/boot/overlays
+          make INSTALL_MOD_PATH=$HOME/artifacts modules_install
+
+          
+          cp ../linux-* $HOME/artifacts
+          cp arch/arm/boot/dts/*.dtb $HOME/artifacts/boot/
+          cp arch/arm/boot/dts/overlays/*.dtb* $HOME/artifacts/boot/overlays/
+          cp arch/arm/boot/dts/overlays/README $HOME/artifacts/boot/overlays/
+          cp arch/arm/boot/zImage $HOME/artifacts/boot/kernel-kavan.img
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
