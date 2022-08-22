@@ -27,8 +27,8 @@ jobs:
           mkdir -p $HOME/artifacts
           cp -r ../linux-* $HOME/artifacts
           sudo cp -r /boot $HOME/artifacts
-          sudo cp -r /usr/lib/linux-image-6*/broadcom $HOME/artifacts
-          sudo cp -r /usr/lib/linux-image-6*/overlays $HOME/artifacts
+          sudo cp -r /usr/lib/linux-image-6.0.0-rc2-v7l+/broadcom $HOME/artifacts
+          sudo cp -r /usr/lib/linux-image-6.0.0-rc2-v7l+/overlays $HOME/artifacts
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
