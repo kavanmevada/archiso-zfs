@@ -6,8 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on ubuntu-latest aarch64
     steps:
-        name: Run commands
-          # Set an output parameter `uname` for use in subsequent steps
+      - name: Run commands
         run: |
           uname -a
           echo ::set-output name=uname::$(uname -a)
