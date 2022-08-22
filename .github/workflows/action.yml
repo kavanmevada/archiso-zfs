@@ -24,6 +24,11 @@ jobs:
           make ARCH=arm64 bcm2711_defconfig
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 Image.gz modules dtbs
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 bindeb-pkg
+          mkdir -p $HOME/artifacts
+          cp -r ../linux-* $HOME/artifacts
+          cp -r /boot $HOME/artifacts
+          cp -r /usr/lib/linux-image-6*/broadcom $HOME/artifacts
+          cp -r /usr/lib/linux-image-6*/overlays $HOME/artifacts
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
@@ -34,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with: 
           name: assets-for-download
-          path: ../linux*.deb
+          path: $HOME/artifacts
