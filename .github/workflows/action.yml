@@ -23,22 +23,16 @@ jobs:
           # cp -r /tmp/linux/arch/arm/boot/dts/overlays ./arch/arm/boot/dts
           # ln -s ../../../arm/boot/dts/overlays arch/arm64/boot/dts/overlays
       
-      - name: Configure
-        run: |
           cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
           echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
           make ARCH=arm64 bcm2835_defconfig
-          
-      - name: Make
-        run: |
+
           make -j24 ARCH=arm64 \
             CROSS_COMPILE=aarch64-linux-gnu- \
             CXXFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
             CFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
             zImage modules dtbs
 
-      - name: Install
-        run: |
           mkdir -p $HOME/artifacts/boot/overlays
           make INSTALL_MOD_PATH=$HOME/artifacts modules_install
           cp arch/arm64/boot/zImage $HOME/artifacts/boot/kernel8.img
