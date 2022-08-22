@@ -11,7 +11,7 @@ jobs:
           uname -a
           echo ::set-output name=uname::$(uname -a)
           DEBIAN_FRONTEND=noninteractive
-          apt update -qq -o=Dpkg::Use-Pty=0 > /dev/null && apt-get install -qq -o=Dpkg::Use-Pty=0 curl crossbuild-essential-arm64 subversion git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves bison -y > /dev/null
+          apt update -qq -o=Dpkg::Use-Pty=0 > /dev/null && apt-get install -qq -o=Dpkg::Use-Pty=0 curl crossbuild-essential-arm64 gcc-aarch64-linux-gnu subversion git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves bison -y > /dev/null
           git clone --quiet --depth=1 https://github.com/torvalds/linux && cd linux
           curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm64/configs/bcm2711_defconfig
           curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
