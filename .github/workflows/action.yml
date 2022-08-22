@@ -23,7 +23,7 @@ jobs:
           export KERNEL=kernel8
           export PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin"
 
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- bcm2711_defconfig
+          make ARCH=arm64 bcm2711_defconfig
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 Image.gz modules dtbs
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 bindeb-pkg
 
