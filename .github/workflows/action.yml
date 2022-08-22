@@ -26,9 +26,9 @@ jobs:
           make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 bindeb-pkg
           mkdir -p $HOME/artifacts
           cp -r ../linux-* $HOME/artifacts
-          cp -r /boot $HOME/artifacts
-          cp -r /usr/lib/linux-image-6*/broadcom $HOME/artifacts
-          cp -r /usr/lib/linux-image-6*/overlays $HOME/artifacts
+          sudo cp -r /boot $HOME/artifacts
+          sudo cp -r /usr/lib/linux-image-6*/broadcom $HOME/artifacts
+          sudo cp -r /usr/lib/linux-image-6*/overlays $HOME/artifacts
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
