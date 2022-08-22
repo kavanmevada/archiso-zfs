@@ -6,7 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on ubuntu-latest aarch64
     steps:
-      - uses: actions/checkout@v2.1.0
         name: Run commands
           # Set an output parameter `uname` for use in subsequent steps
         run: |
