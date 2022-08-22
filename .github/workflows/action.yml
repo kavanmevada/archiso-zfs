@@ -6,39 +6,45 @@ jobs:
     runs-on: ubuntu-latest
     name: Build on ubuntu-latest aarch64
     steps:
-      - name: Run commands
-        run: |
-          uname -a
-          echo ::set-output name=uname::$(uname -a)
-          DEBIAN_FRONTEND=noninteractive
-          sudo apt-get install curl crossbuild-essential-arm64 gcc-aarch64-linux-gnu subversion git build-essential linux-source bc kmod cpio flex libncurses5-dev libelf-dev libssl-dev dwarves bison -y
-          git clone --quiet --depth=1 https://github.com/torvalds/linux && cd linux
-          curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm64/configs/bcm2711_defconfig
-          curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
-          tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
-          mkdir /tmp/linux && git clone --depth=1 https://github.com/raspberrypi/linux /tmp/linux
-          cp -r /tmp/linux/arch/arm/boot/dts/overlays ./arch/arm/boot/dts
-          ln -s ../../../arm/boot/dts/overlays arch/arm64/boot/dts/overlays
-
-          scripts/config --disable DEBUG_INFO
-          make ARCH=arm64 bcm2711_defconfig
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 zImage modules dtbs
-          make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j5 bindeb-pkg
-          
-          mkdir -p $HOME/artifacts/boot/overlays
-          make INSTALL_MOD_PATH=$HOME/artifacts modules_install
-
-          
-          cp ../linux-* $HOME/artifacts
-          cp arch/arm/boot/dts/*.dtb $HOME/artifacts/boot/
-          cp arch/arm/boot/dts/overlays/*.dtb* $HOME/artifacts/boot/overlays/
-          cp arch/arm/boot/dts/overlays/README $HOME/artifacts/boot/overlays/
-          cp arch/arm/boot/zImage $HOME/artifacts/boot/kernel-kavan.img
-
-      - name: Get the output
-        # Echo the `uname` output parameter from the `runcmd` step
+      - name: Install the toolchain
+        env:
+          DEBIAN_FRONTEND: noninteractive
         run: |
           echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+          sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
+
+      - name: Fetch Upstream
+        run: |
+          git clone --depth=1 https://github.com/torvalds/linux && cd linux
+          # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm64/configs/bcm2711_defconfig
+          # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
+          # tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
+          # mkdir /tmp/linux && git clone --depth=1 https://github.com/raspberrypi/linux /tmp/linux
+          # cp -r /tmp/linux/arch/arm/boot/dts/overlays ./arch/arm/boot/dts
+          # ln -s ../../../arm/boot/dts/overlays arch/arm64/boot/dts/overlays
+      
+      - name: Configure
+        run: |
+          scripts/config --disable DEBUG_INFO
+          cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
+          make ARCH=arm64 bcm2835_defconfig
+          
+      - name: Make
+        run: |
+          make -j24 ARCH=arm64 \
+            CROSS_COMPILE=aarch64-linux-gnu- \
+            CXXFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
+            CFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
+            zImage modules dtbs
+
+      - name: Install
+        run: |
+          mkdir -p $HOME/artifacts/boot/overlays
+          make INSTALL_MOD_PATH=$HOME/artifacts modules_install
+          cp arch/arm64/boot/Image $HOME/artifacts/boot/kernel8.img
+          cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
+          cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
