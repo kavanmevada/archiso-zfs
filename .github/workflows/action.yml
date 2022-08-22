@@ -25,7 +25,6 @@ jobs:
       
       - name: Configure
         run: |
-          scripts/config --disable DEBUG_INFO
           cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
           echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
           make ARCH=arm64 bcm2835_defconfig
@@ -42,7 +41,7 @@ jobs:
         run: |
           mkdir -p $HOME/artifacts/boot/overlays
           make INSTALL_MOD_PATH=$HOME/artifacts modules_install
-          cp arch/arm64/boot/Image $HOME/artifacts/boot/kernel8.img
+          cp arch/arm64/boot/zImage $HOME/artifacts/boot/kernel8.img
           cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
           cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
 
