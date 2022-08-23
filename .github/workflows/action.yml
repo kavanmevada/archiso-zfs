@@ -42,7 +42,7 @@ jobs:
 
         mkdir artifacts && make INSTALL_MOD_PATH=artifacts modules_install
         cp arch/arm64/boot/Image.gz artifacts/kernel8.img
-        cp arch/arm64/boot/dts/*.dtb artifacts
+        cp -r arch/arm64/boot/* artifacts
 
       working-directory: linux
 
