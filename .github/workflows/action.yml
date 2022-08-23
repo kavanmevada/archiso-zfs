@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch Upstream
         run: |
-          git clone --silent --depth=1 https://github.com/torvalds/linux && cd linux
+          git clone --quiet --depth=1 https://github.com/torvalds/linux && cd linux
           # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm64/configs/bcm2711_defconfig
           # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
           # tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
