@@ -25,6 +25,15 @@ jobs:
       
           cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
           echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_DRM_VC4=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_DRM_V3D=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_USB_DWC3=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_USB_DWC2=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_EXFAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_FAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_NFSD=y' >> arch/arm64/configs/bcm2835_defconfig
+          echo 'CONFIG_NFS_FS=y' >> arch/arm64/configs/bcm2835_defconfig
+          
           make ARCH=arm64 bcm2835_defconfig
           echo $(make kernelversion)
 
@@ -37,8 +46,8 @@ jobs:
           mkdir -p $HOME/artifacts/boot/overlays
           make INSTALL_MOD_PATH=$HOME/artifacts modules_install
           cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
-          cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
-          cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
+          # cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
+          # cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
