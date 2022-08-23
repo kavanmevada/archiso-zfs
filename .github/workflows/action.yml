@@ -11,14 +11,11 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
 
-    - name: Install the toolchain
     - run: mkdir -p $HOME/artifacts
     - run: sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
 
-    - name: Fetch Upstream
     - run: git clone --quiet --depth=1 https://github.com/torvalds/linux
 
-    - name: Make
     - run: |
         cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
@@ -44,7 +41,6 @@ jobs:
         make INSTALL_MOD_PATH=$HOME/artifacts modules_install
         cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
 
-    - name: Publish Artifacts
     - uses: actions/upload-artifact@v3
       with:
         name: Kernel Artifacts
