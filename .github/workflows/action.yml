@@ -13,7 +13,6 @@ jobs:
     - run: git clone --quiet --depth=1 https://github.com/torvalds/linux $HOME/linux
     - run: |
         mkdir -p $HOME/artifacts
-
         cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_DRM_VC4=y' >> arch/arm64/configs/bcm2835_defconfig
@@ -36,6 +35,7 @@ jobs:
 
         make INSTALL_MOD_PATH=$HOME/artifacts modules_install
         cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
+      working-directory: $HOME/linux
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
