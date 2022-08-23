@@ -10,7 +10,7 @@ jobs:
     steps:
     - run: mkdir -p artifacts
     - run: sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
-    - run: git clone --quiet --depth=1 https://github.com/torvalds/linux $HOME/linux
+    - run: git clone --quiet --depth=1 https://github.com/torvalds/linux
     - run: |
         cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
@@ -32,8 +32,8 @@ jobs:
             CFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
             Image.gz modules dtbs
 
-        make INSTALL_MOD_PATH=$HOME/artifacts modules_install
-        cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
+        mkdir artifacts && make INSTALL_MOD_PATH=artifacts modules_install
+        cp arch/arm64/boot/Image.gz artifacts/boot/kernel8.img
 
       working-directory: linux
 
@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Kernel Artifacts
-        path: $HOME/artifacts
+        path: linux/artifacts
