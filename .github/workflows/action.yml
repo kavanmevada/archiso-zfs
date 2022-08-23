@@ -37,8 +37,11 @@ jobs:
 
       working-directory: linux
 
+    - name: Tar files
+      run: tar cf - linux/artifacts/ | xz -9 -z - > artifacts.tar.xz
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: Kernel Artifacts
-        path: linux/artifacts
+        name: kernel-artifact
+        path: artifacts.tar.xz
