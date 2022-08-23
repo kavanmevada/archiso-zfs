@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch Upstream
         run: |
-          git clone --depth=1 https://github.com/torvalds/linux && cd linux
+          git clone --silent --depth=1 https://github.com/torvalds/linux && cd linux
           # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output ./arch/arm64/configs/bcm2711_defconfig
           # curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/boot/dts/Makefile --output /tmp/Makefile
           # tail -n 10 /tmp/Makefile >> ./arch/arm/boot/dts/Makefile
@@ -26,6 +26,7 @@ jobs:
           cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
           echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
           make ARCH=arm64 bcm2835_defconfig
+          echo $(make kernelversion)
 
           make -j24 ARCH=arm64 \
             CROSS_COMPILE=aarch64-linux-gnu- \
@@ -35,7 +36,7 @@ jobs:
 
           mkdir -p $HOME/artifacts/boot/overlays
           make INSTALL_MOD_PATH=$HOME/artifacts modules_install
-          cp arch/arm64/boot/vmlinuz-* $HOME/artifacts/boot/kernel8.img
+          cp arch/arm64/boot/vmlinuz-$(make kernelversion) $HOME/artifacts/boot/kernel8.img
           cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
           cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
 
