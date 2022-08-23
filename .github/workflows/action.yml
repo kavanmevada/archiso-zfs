@@ -12,7 +12,6 @@ jobs:
     - run: sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
     - run: git clone --quiet --depth=1 https://github.com/torvalds/linux $HOME/linux
     - run: |
-        mkdir -p $HOME/artifacts
         cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_DRM_VC4=y' >> arch/arm64/configs/bcm2835_defconfig
