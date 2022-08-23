@@ -5,7 +5,12 @@ jobs:
     # The host should always be Linux
     runs-on: ubuntu-latest
     name: Build on ubuntu-latest aarch64
+
+
     steps:
+      - uses: actions/upload-artifact@v3
+        with:
+          path: $HOME/artifacts
       - name: Install the toolchain
         env:
           DEBIAN_FRONTEND: noninteractive
@@ -48,9 +53,3 @@ jobs:
           cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
           # cp arch/arm64/boot/dts/overlays/*.dtbo $HOME/artifacts/boot/overlays/
           # cp arch/arm64/boot/dts/broadcom/*.dtb $HOME/artifacts/boot/
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
-        with: 
-          name: assets-for-download
-          path: $HOME/artifacts
