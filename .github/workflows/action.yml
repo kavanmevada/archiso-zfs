@@ -5,18 +5,15 @@ jobs:
     # The host should always be Linux
     runs-on: ubuntu-latest
     name: Build on ubuntu-latest aarch64
-
+    env:
+      DEBIAN_FRONTEND: noninteractive
     steps:
-    - uses: actions/checkout@v2
-      env:
-        DEBIAN_FRONTEND: noninteractive
-
     - run: mkdir -p $HOME/artifacts
     - run: sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
-
-    - run: git clone --quiet --depth=1 https://github.com/torvalds/linux
-
+    - run: git clone --quiet --depth=1 https://github.com/torvalds/linux $HOME/linux
     - run: |
+        mkdir -p $HOME/artifacts
+
         cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_DRM_VC4=y' >> arch/arm64/configs/bcm2835_defconfig
@@ -37,11 +34,11 @@ jobs:
             CFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
             Image.gz modules dtbs
 
-        mkdir -p $HOME/artifacts/boot/overlays
         make INSTALL_MOD_PATH=$HOME/artifacts modules_install
         cp arch/arm64/boot/Image.gz $HOME/artifacts/boot/kernel8.img
 
-    - uses: actions/upload-artifact@v3
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
       with:
         name: Kernel Artifacts
         path: $HOME/artifacts
