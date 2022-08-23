@@ -12,18 +12,26 @@ jobs:
     - run: sudo apt-get install gcc-aarch64-linux-gnu --assume-yes
     - run: git clone --quiet --depth=1 https://github.com/torvalds/linux
     - run: |
-        cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_ARM_LPAE=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_DRM_VC4=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_DRM_V3D=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_USB_DWC3=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_USB_DWC2=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_EXFAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_FAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
-        # echo 'CONFIG_NFSD=y' >> arch/arm64/configs/bcm2835_defconfig
-        # echo 'CONFIG_NFS_FS=y' >> arch/arm64/configs/bcm2835_defconfig
+        # cp arch/arm/configs/bcm2835_defconfig arch/arm64/configs/bcm2835_defconfig
+        function __rep_app() {
+            if ! sed -i "/$2/{s//$3/;h};"'${x;/./{x;q0};x;q1}' $1; then echo "$3" >> $1; fi
+        }
+        
+        curl -L https://raw.githubusercontent.com/raspberrypi/linux/rpi-5.15.y/arch/arm/configs/bcm2711_defconfig --output arch/arm64/configs/bcm2711_defconfig
+        
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_DRM_VC4=m" "CONFIG_DRM_VC4=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_DRM_V3D=m" "CONFIG_DRM_V3D=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_USB_DWC3=m" "CONFIG_USB_DWC3=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_USB_DWC2=m" "CONFIG_USB_DWC2=y"
+        
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_EXFAT_FS=m" "CONFIG_EXFAT_FS=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_FAT_FS=m" "CONFIG_FAT_FS=y"
+        
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_NFSD=m" "CONFIG_NFSD=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_NFS_FS=m" "CONFIG_NFS_FS=y"
+        __rep_app "arch/arm64/configs/bcm2835_defconfig" "CONFIG_ARM_LPAE=m" "CONFIG_ARM_LPAE=y"
           
-        make ARCH=arm64 bcm2835_defconfig
+        make ARCH=arm64 bcm2711_defconfig
         echo "Building: $(make kernelversion)"
 
         make -j21 ARCH=arm64 \
@@ -34,7 +42,7 @@ jobs:
 
         mkdir artifacts && make INSTALL_MOD_PATH=artifacts modules_install
         cp arch/arm64/boot/Image.gz artifacts/kernel8.img
-        cp arch/arm64/boot/dts/broadcom/*.dtb artifacts
+        cp arch/arm64/boot/dts/*.dtb artifacts
 
       working-directory: linux
 
