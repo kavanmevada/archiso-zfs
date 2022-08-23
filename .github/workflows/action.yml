@@ -20,11 +20,11 @@ jobs:
         echo 'CONFIG_USB_DWC2=y' >> arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_EXFAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
         echo 'CONFIG_FAT_FS=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_NFSD=y' >> arch/arm64/configs/bcm2835_defconfig
-        echo 'CONFIG_NFS_FS=y' >> arch/arm64/configs/bcm2835_defconfig
+        # echo 'CONFIG_NFSD=y' >> arch/arm64/configs/bcm2835_defconfig
+        # echo 'CONFIG_NFS_FS=y' >> arch/arm64/configs/bcm2835_defconfig
           
         make ARCH=arm64 bcm2835_defconfig
-        echo $(make kernelversion)
+        echo "Building: $(make kernelversion)"
 
         make -j21 ARCH=arm64 \
             CROSS_COMPILE=aarch64-linux-gnu- \
@@ -34,6 +34,7 @@ jobs:
 
         mkdir artifacts && make INSTALL_MOD_PATH=artifacts modules_install
         cp arch/arm64/boot/Image.gz artifacts/kernel8.img
+        cp arch/arm64/boot/dts/broadcom/*.dtb artifacts
 
       working-directory: linux
 
