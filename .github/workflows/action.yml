@@ -39,19 +39,19 @@ jobs:
             CFLAGS="-march=armv8-a+crc -mtune=cortex-a72" \
             Image.gz modules dtbs
 
-        mkdir artifacts && make INSTALL_MOD_PATH=artifacts modules_install
-        rsync -avz arch/arm64/boot/dts/*/*.dtb artifacts
-        rsync -avz arch/arm64/boot/Image.gz artifacts
-        # cp arch/arm64/boot/Image.gz artifacts/kernel8.img
-        # cp -r arch/arm64/boot/dts/broadcom/*.dtb artifacts
+        mkdir -p artifacts/boot/overlays && make INSTALL_MOD_PATH=artifacts modules_install
+        cp arch/arm64/boot/dts/broadcom/*.dtb artifacts/boot/
+        cp arch/arm64/boot/dts/overlays/*.dtb* artifacts/boot/overlays/
+        cp arch/arm64/boot/dts/overlays/README artifacts/boot/overlays/
+        cp arch/arm64/boot/Image.gz artifacts/boot/kernel8.img
 
       working-directory: linux
 
     - name: Tar files
-      run: tar cf - linux/artifacts/ | xz -9 -z - > artifacts.tar.xz
+      run: tar -czvf artifacts.tar.gz linux/artifacts
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
         name: kernel-artifact
-        path: artifacts.tar.xz
+        path: artifacts.tar.gz
