@@ -34,9 +34,9 @@ jobs:
         echo "Building: $(make kernelversion)"
         scripts/config --disable DEBUG_INFO
 
-        make ARCH=arm64 Image.gz modules dtbs bindeb-pkg
+        mkdir -p artifacts/boot/overlays
+        make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_MOD_PATH=artifacts Image.gz modules dtbs bindeb-pkg modules_install
 
-        mkdir -p artifacts/boot/overlays && make INSTALL_MOD_PATH=artifacts modules_install
         cp arch/arm64/boot/dts/broadcom/*.dtb artifacts/boot/
         cp arch/arm64/boot/dts/overlays/*.dtb* artifacts/boot/overlays/
         cp arch/arm64/boot/dts/overlays/README artifacts/boot/overlays/
